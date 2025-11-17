@@ -1,0 +1,388 @@
+/* --- 0. Global Reset & Variables --- */
+:root {
+    --color-primary: #007bff;      /* Professional Blue */
+    --color-accent: #28a745;       /* Booking Success Green */
+    --color-text: #333;
+    --color-bg-light: #f8f9fa;
+    --color-card-bg: #fff;
+    --shadow-light: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    --border-radius: 0.5rem;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-bg-light);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* --- 1. Header and Footer --- */
+.app-header {
+    background-color: var(--color-card-bg);
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.app-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: var(--color-primary);
+    font-size: 1.5em;
+}
+
+.app-header nav a {
+    text-decoration: none;
+    color: var(--color-text);
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.app-header nav a:hover {
+    color: var(--color-primary);
+}
+
+.app-footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid #e9ecef;
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+/* --- 2. Panels, Forms & Buttons --- */
+.panel {
+    background: var(--color-card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    margin: 30px 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.input-group i {
+    margin-right: 8px;
+    color: var(--color-primary);
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+.btn.primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn.primary:hover {
+    background-color: #0056b3;
+}
+
+.search-button {
+    height: 44px;
+}
+
+/* --- 3. Results List & Cards --- */
+.results-list h3 {
+    margin: 25px 0 15px 0;
+    color: var(--color-text);
+}
+
+.restaurant-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: var(--color-card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.details {
+    flex-grow: 1;
+}
+
+.restaurant-name {
+    margin-top: 0;
+    color: var(--color-primary);
+}
+
+.rating {
+    color: #ffc107;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.cuisine-type {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.tag-promo {
+    margin-top: 8px;
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+.tag-promo i {
+    margin-right: 5px;
+}
+
+.availability-times {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.time-slot {
+    background-color: #f1f1f1;
+    color: var(--color-text);
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.time-slot:hover {
+    background-color: #e9ecef;
+}
+
+.time-slot.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.btn.accent {
+    background-color: var(--color-accent);
+    color: white;
+    margin-left: 15px;
+}
+
+.btn.accent:hover {
+    background-color: #1e7e34;
+}
+
+/* --- 4. Responsiveness (NFR-05) --- */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .app-header .container {
+        flex-direction: column;
+    }
+    .app-header nav {
+        margin-top: 10px;
+    }
+
+    .restaurant-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .availability-times {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    
+    .book-button {
+        margin-left: 0 !important;
+        width: 100%;
+        order: 10;
+    }
+
+    /* --- New Section 1: Hero Section Styles (Introduction) --- */
+.hero-section {
+    background-color: var(--color-primary);
+    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(''); /* Placeholder for a good background image */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.hero-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+}
+
+.hero-section p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.hero-section .btn.accent {
+    background-color: white;
+    color: var(--color-primary);
+    border: 2px solid white;
+    padding: 12px 30px;
+    font-size: 1.1em;
+}
+
+.hero-section .btn.accent:hover {
+    background-color: var(--color-bg-light);
+}
+
+/* --- New Section 2: Dashboard Styles --- */
+
+.dashboard-view {
+    padding-top: 30px;
+}
+
+.back-button {
+    background: none;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.booking-table {
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.table-header, .table-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1.5fr 1.5fr; /* Columns for the dashboard table */
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.table-header {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    color: var(--color-text);
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-confirmed .status-badge {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-completed .status-badge {
+    background-color: #fce8e8;
+    color: #721c24;
+}
+
+.status-cancelled .status-badge {
+    background-color: #e2e3e5;
+    color: #6c757d;
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8em;
+}
+
+.btn-cancel:hover {
+    background-color: #c82333;
+}
+
+@media (max-width: 768px) {
+    .table-header, .table-row {
+        grid-template-columns: 1fr 1fr; /* Collapse to 2 columns on mobile */
+    }
+    .table-row span:nth-child(2),
+    .table-row span:nth-child(3),
+    .table-row span:nth-child(4),
+    .table-row span:nth-child(5) {
+        /* Hide less important columns and stack remaining */
+        grid-column: span 1;
+        font-size: 0.9em;
+    }
+    .table-header {
+        display: none; /* Hide header completely on mobile */
+    }
+    .table-row {
+        display: block;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #eee;
+    }
+    .table-row span {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .table-row span:first-child {
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+    .btn-cancel {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+}
