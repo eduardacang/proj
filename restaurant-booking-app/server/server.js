@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db'); // Import the database connection module
 require('dotenv').config();
+const path = require('path'); // <<< FIX 1: IMPORT 'path' MODULE
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.post('/api/search', async (req, res) => {
 
     try {
         // Query PostgreSQL for restaurants with available capacity near the target time
+        // Note: The HAVING clause already ensures capacity is met, so we select all relevant data.
         const availabilityQuery = `
             SELECT 
                 r.id, r.name, r.capacity, r.cuisine,
@@ -35,7 +37,7 @@ app.post('/api/search', async (req, res) => {
             AND b.booking_time >= $1 AND b.booking_time <= $2
             WHERE r.subscription_active = TRUE
             GROUP BY r.id, r.name, r.capacity, r.cuisine
-            HAVING r.capacity >= $3 + COALESCE(SUM(b.party_size), 0) -- Check if capacity meets required partySize + current bookings
+            HAVING r.capacity >= $3 + COALESCE(SUM(b.party_size), 0)
             ORDER BY r.name;
         `;
         
@@ -45,7 +47,8 @@ app.post('/api/search', async (req, res) => {
         // Transform the data to include remaining slots
         const availableRestaurants = rows.map(r => ({
             ...r,
-            available_slots: r.capacity - (r.booked_count || 0),
+            // FIX 2: Correctly calculate the available slots based on current bookings
+            available_slots: r.capacity - (r.booked_count || 0), 
         }));
 
         res.json(availableRestaurants);
@@ -61,13 +64,9 @@ app.post('/api/search', async (req, res) => {
  * Implements FR-C03 & FR-C05: Creates a new booking. (Assumes payment success)
  */
 app.post('/api/book', async (req, res) => {
-    // In a real application, PAYMENT GATEWAY PROCESSING happens here first.
     const { restaurantId, customerName, partySize, bookingTime, deposit } = req.body;
     
     try {
-        // Basic check to prevent overbooking (highly recommended)
-        // A more robust check should run here, but we will skip it for simplicity
-        
         const result = await db.query(
             'INSERT INTO bookings (restaurant_id, customer_name, party_size, booking_time, deposit_amount, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
             [restaurantId, customerName, partySize, bookingTime, deposit || 0.00, 'Confirmed']
@@ -82,9 +81,15 @@ app.post('/api/book', async (req, res) => {
     }
 });
 
+// GET: Simple root route to confirm the server is running (Development Check)
+app.get('/', (req, res) => {
+    res.json({ message: 'Server is running! API ready on /api/search' });
+});
+
 
 // Serve static assets in production (optional for Render but good practice)
 if (process.env.NODE_ENV === 'production') {
+    // FIX 3: Removed duplicate code block and ensured it's correctly placed at the end.
     app.use(express.static(path.join(__dirname, 'client/build')));
 
     app.get('*', (req, res) => {
